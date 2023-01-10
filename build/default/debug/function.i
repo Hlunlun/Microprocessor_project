@@ -1,4 +1,4 @@
-# 1 "newmain.c"
+# 1 "function.c"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 288 "<built-in>" 3
@@ -6,8 +6,7 @@
 # 1 "<built-in>" 2
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
-# 1 "newmain.c" 2
-# 1 "./configure_header_file.h" 1
+# 1 "function.c" 2
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\xc.h" 1 3
 # 18 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -4609,262 +4608,86 @@ __attribute__((__unsupported__("The " "Write_b_eep" " routine is no longer suppo
 unsigned char __t1rd16on(void);
 unsigned char __t3rd16on(void);
 # 33 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\xc.h" 2 3
-# 1 "./configure_header_file.h" 2
-
-
-
-
-
+# 1 "function.c" 2
 
 
 
 #pragma config OSC = INTIO67
-
-#pragma config FCMEN = OFF
-
-#pragma config IESO = OFF
-
-
-
-#pragma config PWRT = OFF
-#pragma config BOREN = SBORDIS
-
-
-#pragma config BORV = 3
-
-
 #pragma config WDT = OFF
-
-#pragma config WDTPS = 32768
-
-
-#pragma config CCP2MX = PORTC
-
+#pragma config PWRT = OFF
+#pragma config BOREN = ON
 #pragma config PBADEN = OFF
-
-
-#pragma config LPT1OSC = OFF
-
-
-#pragma config MCLRE = OFF
-
-
-
-#pragma config STVREN = ON
-
 #pragma config LVP = OFF
-
-#pragma config XINST = OFF
-
-
-
-
-#pragma config CP0 = OFF
-
-#pragma config CP1 = OFF
-
-#pragma config CP2 = OFF
-
-#pragma config CP3 = OFF
-
-
-
-#pragma config CPB = OFF
-
 #pragma config CPD = OFF
-
-
-
-#pragma config WRT0 = OFF
-
-#pragma config WRT1 = OFF
-
-#pragma config WRT2 = OFF
-
-#pragma config WRT3 = OFF
-
-
-
-#pragma config WRTC = OFF
-
-
-#pragma config WRTB = OFF
-
-#pragma config WRTD = OFF
-
-
-
-#pragma config EBTR0 = OFF
-
-
-#pragma config EBTR1 = OFF
-
-
-#pragma config EBTR2 = OFF
-
-
-#pragma config EBTR3 = OFF
-
-
-
-
-#pragma config EBTRB = OFF
-# 1 "newmain.c" 2
-# 12 "newmain.c"
-void forward();
-void backward();
-void left();
-void right();
-void stop();
-void ShowMove(int direcion);
-void MSdelay(unsigned int val);
-# 37 "newmain.c"
-void setcol(unsigned char c1,unsigned char c2,unsigned char c3,unsigned char c4,unsigned char c5,unsigned char c6,unsigned char c7,unsigned char c8){
-    PORTAbits.RA4 = c1;
-    PORTBbits.RB0 = c2;
-    PORTBbits.RB2 = c3;
-    PORTDbits.RD4 = c4;
-    PORTBbits.RB3 =c5;
-    PORTCbits.RC7 = c6;
-    PORTDbits.RD5 = c7;
-    PORTEbits.RE1 =c8;
-}
-
-void setrow(unsigned char r1,unsigned char r2,unsigned char r3,unsigned char r4,unsigned char r5,unsigned char r6,unsigned char r7,unsigned char r8){
-    PORTAbits.RA0 = r1;
-    PORTAbits.RA5 = r2;
-    PORTDbits.RD6 = r3;
-    PORTAbits.RA3 = r4;
-    PORTBbits.RB5 =r5;
-    PORTBbits.RB4 = r6;
-    PORTDbits.RD7 = r7;
-    PORTBbits.RB1 =r8;
-}
+# 25 "function.c"
 void main(void) {
-    TRISD = 0x00;
-    LATD = 0x00;
-    TRISC = 0b00111111;
-    PORTC = 0;
+
+
     TRISA = 0;
-    TRISE=0;
-    TRISB = 0;
-
-    static unsigned char buttonDisable = 0;
-
-    setcol(1,1,1,1,1,1,1,1);
-    setrow(0,0,0,0,0,0,0,0);
+    TRISC = 0;
+    TRISD = 0;
+    PORTD = 0;
+# 99 "function.c"
     while(1){
-        if(!PORTCbits.RC0){
-            forward();
-        }
-        else if(!PORTCbits.RC1){
-            backward();
-        }
-        else if(!PORTCbits.RC3){
-            left();
-        }
-        else if(!PORTCbits.RC5){
-            stop();
-        }
-        else if(!PORTCbits.RC4){
-            right();
+    PORTAbits.RA3 = 0;
 
-        }
+    PORTAbits.RA4 = 1;
+    PORTAbits.RA1 = 0;
+    PORTAbits.RA2 = 0;
+    PORTCbits.RC7 = 0;
+    PORTDbits.RD6 =0;
+    PORTDbits.RD5 = 0;
+    PORTCbits.RC6 = 0;
+    PORTDbits.RD7 = 0;
+
+    PORTDbits.RD4 =0;
+
     }
     return;
 }
-void ShowMove(int direction){
-    switch(direction){
-        case 0:
-
-            break;
-        case 1:
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-    }
-}
-void forward(){
-    while(1){
-        PORTDbits.RD1 = 1;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 1;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC3 ==0 || PORTCbits.RC4 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC1 == 0){
-            PORTCbits.RC0 = 1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            ShowMove(0);
-        }
-    }
-}
-void backward(){
-    while(1){
-        PORTDbits.RD1 = 0;
-        PORTDbits.RD0 = 1;
-        PORTDbits.RD3 = 0;
-        PORTDbits.RD2 = 1;
-        if(PORTCbits.RC3 ==0|| PORTCbits.RC4 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC1 = 1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            ShowMove(1);
-        }
-    }
-}
-void left(){
-    while(1){
-        PORTDbits.RD1 = 0;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 1;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC1 ==0 || PORTCbits.RC4 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC3 =1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            ShowMove(2);
-        }
-    }
-}
-void right(){
-    while(1){
-        PORTDbits.RD1 = 1;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 0;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC1 ==0 || PORTCbits.RC3 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC4 = 1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            ShowMove(3);
-        }
-    }
-}
-void stop(){
-    while(1){
-        PORTDbits.RD1 = 0;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 0;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC1 ==0 || PORTCbits.RC3 == 0 || PORTCbits.RC4 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC5 = 1;
-            break;
-        }
-    }
-}
-void MSdelay(unsigned int val)
+int i = 0;
+int j = 0;
+int k = 0;
+void __attribute__((picinterrupt(("")))) ISR(void)
 {
-     unsigned int i,j;
-        for(i=0;i<=val;i++)
-            for(j=0;j<81;j++);
- }
+    if (INTCONbits.INT0IF==1){
+        if(i % 2==0){
+            CCPR1L = 0x0b;
+            CCP1CONbits.DC1B = 0b01;
+        }
+        else{
+            CCPR1L = 0x12;
+            CCP1CONbits.DC1B = 0x03;
+        }
+        i++;
+        INTCONbits.TMR0IF = 0;
+        INTCONbits.INT0IF = 0;
+    }
+
+    if (INTCON3bits.INT1IF==1){
+        if(j % 2==0){
+            CCPR2L = 0x0b;
+            CCP2CONbits.DC2B = 0b01;
+        }
+        else{
+            CCPR2L = 0x12;
+            CCP2CONbits.DC2B = 0x03;
+        }
+        j++;
+
+        INTCON3bits.INT1IF = 0;
+    }
+
+    if (INTCON3bits.INT2IF == 1){
+        if(k % 2==0){
+            LATA = 3;
+        }
+        else{
+            LATA = 0;
+        }
+        k++;
+
+        INTCON3bits.INT2IF = 0;
+    }
+
+}
