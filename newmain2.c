@@ -17,10 +17,10 @@ void stop();
 void ShowMove();
 void DrawMove();
 void MSdelay(unsigned int val);
-#define row1 PORTAbits.RA0   
-#define row2 PORTAbits.RA5 
+#define row1 PORTAbits.RA1 
+#define row2 PORTAbits.RA0 
 #define row3 PORTDbits.RD6 
-#define row4 PORTAbits.RA3  
+#define row4 PORTCbits.RC6  
 #define row5 PORTBbits.RB5 
 #define row6 PORTBbits.RB4 
 #define row7 PORTDbits.RD7 
@@ -38,63 +38,33 @@ void MSdelay(unsigned int val);
 #define high 0
 #define low 1
 unsigned int direction = 0; // 0 : forward , 1 : back , 2: right, 3: left;
-/*
- |              ^         
- |  forward     |  back  --> right < --left
- v                          |
- */
-void setcol(unsigned int col){
-    switch(col){
-        case 0: col1 = high; break;
-        case 1: col2 = high; break;
-        case 2: col3 = high; break;
-        case 3: col4 = high; break;
-        case 4: col5 = high; break;
-        case 5: col6 = high; break;
-        case 6: col7 = high; break;
-        case 7: col8 = high; break;
-    }
+
+void setrowBits(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g,unsigned char h){
+    row1=a;
+    row2=b;
+    row3=c;
+    row4=d;
+    row5=e;
+    row6=f;
+    row7=g;
+    row8=h;
 }
-void unsetcol(unsigned int col){
-    switch(col){
-        case 0: col1 = low; break;
-        case 1: col2 = low; break;
-        case 2: col3 = low; break;
-        case 3: col4 = low; break;
-        case 4: col5 = low; break;
-        case 5: col6 = low; break;
-        case 6: col7 = low; break;
-        case 7: col8 = low; break;
-    }
+void setcolBits(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g,unsigned char h){
+    col1=a;
+    col2=b;
+    col3=c;
+    col4=d;
+    col5=e;
+    col6=f;
+    col7=g;
+    col8=h;
 }
-void setrow(unsigned int row){
-    switch(row){
-        case 0: row1 = high; break;
-        case 1: row2 = high; break;
-        case 2: row3 = high; break;
-        case 3: row4 = high; break;
-        case 4: row5 = high; break;
-        case 5: row6 = high; break;
-        case 6: row7 = high; break;
-        case 7: row8 = high; break;       
-    }
-}
-void unsetrow(unsigned int row){
-    switch(row){
-        case 0: row1 = low; break;
-        case 1: row2 = low; break;
-        case 2: row3 = low; break;
-        case 3: row4 = low; break;
-        case 4: row5 = low; break;
-        case 5: row6 = low; break;
-        case 6: row7 = low; break;
-        case 7: row8 = low; break;
-    }
-}
+int interval = 100;
 unsigned int array[8][8];
 unsigned int curRow = 0;
 unsigned int curCol = 0;
 void main(void) { 
+    ADCON1 = 0x0F;
     TRISD = 0x00;                /* set PORT as output port */
     LATD = 0x00;
     TRISC = 0b00111111;
@@ -102,17 +72,14 @@ void main(void) {
     TRISA = 0;
     TRISE=0;
     TRISB = 0;
-    
-    for(unsigned int i = 0;i < 8;i++){
-        for(unsigned int j = 0;j < 8;j++)
-            array[i][j] = 0;
-    }
-    array[0][0] = 1;
+    setcolBits(1,0,0,0,0,0,0,0);
+    setrowBits(0,1,1,1,1,1,1,1);
+    row1 = 0;
     static unsigned char buttonDisable = 0;
-    
-    //setcol(low,low,low,low,low,low,low,low);
-    //setrow(high,high,high,high,high,high,high,high);
+
+
     while(1){
+        DrawMove();
         if(!ButtonForward){
             forward();
         }
@@ -127,47 +94,53 @@ void main(void) {
         }
         else if(!ButtonRight){
             right();
-            
         }
     }
     return;
 }
 void DrawMove(){
-    for(unsigned int i=0;i<8;i++){
-        setrow(i);
-        for(unsigned int j=0;j<8;j++){
-            if(array[i][j] == 0){
-                setcol(i);
-            }
-            else{
-                unsetcol(i);
-            }
-        }
-        unsetrow(i);
-        for(unsigned int j=0;j<10000;j++){
-            for(unsigned int k =0;k<10000;k++);
-        }
-    }
+        if(curRow == 0)      setrowBits(0,1,1,1,1,1,1,1);
+        else if(curRow == 1) setrowBits(1,0,1,1,1,1,1,1);
+        else if(curRow == 2) setrowBits(1,1,0,1,1,1,1,1);
+        else if(curRow == 3) setrowBits(1,1,1,0,1,1,1,1);
+        else if(curRow == 4) setrowBits(1,1,1,1,0,1,1,1);
+        else if(curRow == 5) setrowBits(1,1,1,1,1,0,1,1);
+        else if(curRow == 6) setrowBits(1,1,1,1,1,1,0,1);
+        else if(curRow == 7) setrowBits(1,1,1,1,1,1,1,0);
+        
+        if(curCol == 0)      setcolBits(1,0,0,0,0,0,0,0);
+        else if(curCol == 1) setcolBits(0,1,0,0,0,0,0,0);
+        else if(curCol == 2) setcolBits(0,0,1,0,0,0,0,0);
+        else if(curCol == 3) setcolBits(0,0,0,1,0,0,0,0);
+        else if(curCol == 4) setcolBits(0,0,0,0,1,0,0,0);
+        else if(curCol == 5) setcolBits(0,0,0,0,0,1,0,0);
+        else if(curCol == 6) setcolBits(0,0,0,0,0,0,1,0);
+        else if(curCol == 7) setcolBits(0,0,0,0,0,0,0,1);    
 }
+
+
 void ShowMove(){
     switch(direction){
         case 0: //move forward;
-            if(curRow!=7) curRow++;
+            if(curRow!=7) curRow = curRow + 1;
             break;
         case 1: // move back;
-            if(curRow!=0) curCol--;
+            if(curRow!=0) curRow = curRow - 1;
             break;
         case 2: // move left;
-            if(curCol!=7) curCol++;
+            if(curCol!=7) curCol = curCol + 1;
             break;
         case 3: // move right;
-            if(curCol!=0) curCol--;
+            if(curCol!=0) curCol = curCol - 1;
             break;
-        array[curRow][curCol] = 1;
     }
+    array[curRow][curCol] = 1;
     DrawMove();
 }
 void forward(){
+    int count1 = 0;
+    int count2 = 0;
+    int count3 = 0;
     while(1){   
         Left_1 = 1;
         Left_2 = 0;
@@ -178,13 +151,23 @@ void forward(){
             break;
         }
         else{
-            MSdelay(200);
             direction = 0;
-            ShowMove();
+            count1++;
+            if(count1==interval){
+                count1 = 0;
+                count2++;
+            }
+            if(count2==interval){
+                count2 =0;
+                ShowMove();
+            }
         }
     }
 }
 void backward(){   
+    int count1 = 0;
+    int count2 = 0;
+    int count3 = 0;
     while(1){
         Left_1 = 0;
         Left_2 = 1;
@@ -195,13 +178,23 @@ void backward(){
             break;
         }
         else{
-            MSdelay(200);
             direction = 1;
-            ShowMove();
+            count1++;
+            if(count1==interval){
+                count1 = 0;
+                count2++;
+            }
+            if(count2==interval){
+                count2 =0;
+                ShowMove();
+            }
         }
     }
 }
 void left(){
+    int count1 = 0;
+    int count2 = 0;
+    int count3 = 0;
     while(1){
         Left_1 = 0;
         Left_2 = 0;
@@ -212,13 +205,23 @@ void left(){
             break;
         }
         else{
-            MSdelay(200);
             direction = 2;
-            ShowMove();
+            count1++;
+            if(count1==interval){
+                count1 = 0;
+                count2++;
+            }
+            if(count2==interval){
+                count2 =0;
+                ShowMove();
+            }
         }
     }
 }
 void right(){
+    int count1 = 0;
+    int count2 = 0;
+    int count3 = 0;
     while(1){
         Left_1 = 1;
         Left_2 = 0;
@@ -229,9 +232,16 @@ void right(){
             break;
         }
         else{
-            MSdelay(200);
             direction = 3;
-            ShowMove();
+            count1++;
+            if(count1==interval){
+                count1 = 0;
+                count2++;
+            }
+            if(count2==interval){
+                count2 =0;
+                ShowMove();
+            }
         }
     }
 }
@@ -239,7 +249,7 @@ void stop(){
     while(1){
         Left_1 = 0;
         Left_2 = 0;
-        Right_1 = 0;
+        Right_1 = 0;       
         Right_2 = 0;
         if(ButtonBack ==0 || ButtonLeft == 0 || ButtonRight == 0 || ButtonForward == 0){
             ButtonStop = 1;
@@ -250,6 +260,6 @@ void stop(){
 void MSdelay(unsigned int val)
 {
      for(unsigned int j=0;j<val;j++){
-            for(unsigned int k =0;k<10000;k++);
+            for(unsigned int k =0;k<100;k++);
         }
  }
