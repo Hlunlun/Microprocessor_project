@@ -129,7 +129,51 @@ void main(void) {
     INTCON2 = 0;
     IPR1bits.RCIP = 0;
     PIE1bits.RCIE = 1;
-    while();   
+    while(){
+        
+        Trigger_Pulse_10us();	/* Transmit 10us pulse to HC-SR04 */
+    	while(PORTBbits.RB0==0){
+             if(PORTBbits.RB3 == 1){
+                Right_1 =1;
+                Right_2 = 0;
+            }
+        }/* Wait for rising edge at Echo pin */
+    	TMR1=0;			/* Load Timer1 register with 0 */
+    	TMR1ON=1;			/* Turn ON Timer1*/
+    	while(PORTBbits.RB0==1 && !TMR1IF){
+             if(PORTBbits.RB3 == 1){
+                Right_1 =1;
+                Right_2 = 0;
+            }
+        }/* Wait for falling edge */
+    	Time = TMR1;		/* Copy Time when echo is received */
+    	TMR1ON=0;			/* Turn OFF Timer1 */
+    	Distance = ((float)Time/117.00);/* Distance =(velocity x Time)/2 */
+        
+        if(Distance<9){
+            set7(0,0,0,0,0,0,0,1);
+        }else if(Distance<8){
+            set7(0,0,0,1,1,1,1,1);
+        }else if(Distance<7){
+            set7(0,1,0,0,0,0,0,1);
+        }else if(Distance<6){
+            set7(0,1,0,0,1,0,0,1);
+        }else if(Distance<5){
+            set7(1,0,0,1,1,0,0,1);
+        }else if(Distance<4){
+            set7(0,0,0,0,0,0,0,1);
+        }else if(Distance<3){
+            set7(0,0,0,0,1,1,0,1);
+        }else if(Distance<2){
+            set7(1,0,0,1,1,1,1,1);
+        }else if(Distance<1){
+            set7(0,0,0,0,0,0,1,1);
+        }
+        
+        if(PORTBbits.RB3 == 1){
+            Right_1 =1;
+            Right_2 = 0;
+        }
     
     
     }
