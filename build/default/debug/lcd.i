@@ -1,4 +1,4 @@
-# 1 "newmain.c"
+# 1 "lcd.c"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 288 "<built-in>" 3
@@ -6,8 +6,11 @@
 # 1 "<built-in>" 2
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
-# 1 "newmain.c" 2
-# 1 "./configure_header_file.h" 1
+# 1 "lcd.c" 2
+# 13 "lcd.c"
+# 1 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\c99\\stdbool.h" 1 3
+# 13 "lcd.c" 2
+
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\xc.h" 1 3
 # 18 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -4609,332 +4612,165 @@ __attribute__((__unsupported__("The " "Write_b_eep" " routine is no longer suppo
 unsigned char __t1rd16on(void);
 unsigned char __t3rd16on(void);
 # 33 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\xc.h" 2 3
-# 1 "./configure_header_file.h" 2
+# 14 "lcd.c" 2
 
 
+# 1 "./lcd.h" 1
+# 17 "./lcd.h"
+typedef struct {
+    volatile unsigned char* PORT;
+    unsigned RS :3;
+    unsigned EN :3;
+    unsigned D4 :3;
+    unsigned D5 :3;
+    unsigned D6 :3;
+    unsigned D7 :3;
+} LCD;
 
+extern LCD lcd;
+# 83 "./lcd.h"
+_Bool LCD_Init ( LCD display );
 
 
+void LCD_putc ( char a );
 
 
+void LCD_puts ( char *a );
 
-#pragma config OSC = INTIO67
 
-#pragma config FCMEN = OFF
+void LCD_putrs ( const char *a );
 
-#pragma config IESO = OFF
 
+void LCD_Write ( unsigned char c );
 
 
-#pragma config PWRT = OFF
-#pragma config BOREN = SBORDIS
+void LCD_Out ( char a );
+# 16 "lcd.c" 2
 
 
-#pragma config BORV = 3
+LCD lcd;
 
+void LCD_Out ( char c ) {
 
-#pragma config WDT = OFF
-
-#pragma config WDTPS = 32768
-
-
-#pragma config CCP2MX = PORTC
-
-#pragma config PBADEN = OFF
-
-
-#pragma config LPT1OSC = OFF
-
-
-#pragma config MCLRE = OFF
-
-
-
-#pragma config STVREN = ON
-
-#pragma config LVP = OFF
-
-#pragma config XINST = OFF
-
-
-
-
-#pragma config CP0 = OFF
-
-#pragma config CP1 = OFF
-
-#pragma config CP2 = OFF
-
-#pragma config CP3 = OFF
-
-
-
-#pragma config CPB = OFF
-
-#pragma config CPD = OFF
-
-
-
-#pragma config WRT0 = OFF
-
-#pragma config WRT1 = OFF
-
-#pragma config WRT2 = OFF
-
-#pragma config WRT3 = OFF
-
-
-
-#pragma config WRTC = OFF
-
-
-#pragma config WRTB = OFF
-
-#pragma config WRTD = OFF
-
-
-
-#pragma config EBTR0 = OFF
-
-
-#pragma config EBTR1 = OFF
-
-
-#pragma config EBTR2 = OFF
-
-
-#pragma config EBTR3 = OFF
-
-
-
-
-#pragma config EBTRB = OFF
-# 1 "newmain.c" 2
-# 12 "newmain.c"
-void forward();
-void backward();
-void left();
-void right();
-void stop();
-void ShowMove();
-void DrawMove();
-void MSdelay(unsigned int val);
-# 40 "newmain.c"
-unsigned int direction = 0;
-
-
-
-
-
-void setcol(unsigned int col){
-    switch(col){
-        case 0: PORTAbits.RA4 = 0; break;
-        case 1: PORTBbits.RB0 = 0; break;
-        case 2: PORTBbits.RB2 = 0; break;
-        case 3: PORTDbits.RD4 = 0; break;
-        case 4: PORTBbits.RB3 = 0; break;
-        case 5: PORTCbits.RC7 = 0; break;
-        case 6: PORTDbits.RD5 = 0; break;
-        case 7: PORTEbits.RE1 = 0; break;
+    if ( c & 1 ){
+        *(lcd.PORT) |= 1 << lcd.D4;
     }
+    else {
+         *(lcd.PORT) &= ~(1 << lcd.D4);
+    }
+
+    if ( c & 2 ) {
+        *(lcd.PORT) |= 1 << lcd.D5;
+    }
+    else {
+        *(lcd.PORT) &= ~(1 << lcd.D5);
+    }
+
+    if ( c & 4 ) {
+        *(lcd.PORT) |= 1 << lcd.D6;
+    }
+    else {
+        *(lcd.PORT) &= ~(1 << lcd.D6);
+    }
+
+    if ( c & 8 ) {
+         *(lcd.PORT) |= 1 << lcd.D7;
+    }
+    else {
+         *(lcd.PORT) &= ~(1 << lcd.D7);
+    }
+
 }
-void unsetcol(unsigned int col){
-    switch(col){
-        case 0: PORTAbits.RA4 = 1; break;
-        case 1: PORTBbits.RB0 = 1; break;
-        case 2: PORTBbits.RB2 = 1; break;
-        case 3: PORTDbits.RD4 = 1; break;
-        case 4: PORTBbits.RB3 = 1; break;
-        case 5: PORTCbits.RC7 = 1; break;
-        case 6: PORTDbits.RD5 = 1; break;
-        case 7: PORTEbits.RE1 = 1; break;
-    }
-}
-void setrow(unsigned int row){
-    switch(row){
-        case 0: PORTAbits.RA0 = 0; break;
-        case 1: PORTAbits.RA5 = 0; break;
-        case 2: PORTDbits.RD6 = 0; break;
-        case 3: PORTAbits.RA3 = 0; break;
-        case 4: PORTBbits.RB5 = 0; break;
-        case 5: PORTBbits.RB4 = 0; break;
-        case 6: PORTDbits.RD7 = 0; break;
-        case 7: PORTBbits.RB1 = 0; break;
-    }
-}
-void unsetrow(unsigned int row){
-    switch(row){
-        case 0: PORTAbits.RA0 = 1; break;
-        case 1: PORTAbits.RA5 = 1; break;
-        case 2: PORTDbits.RD6 = 1; break;
-        case 3: PORTAbits.RA3 = 1; break;
-        case 4: PORTBbits.RB5 = 1; break;
-        case 5: PORTBbits.RB4 = 1; break;
-        case 6: PORTDbits.RD7 = 1; break;
-        case 7: PORTBbits.RB1 = 1; break;
-    }
-}
-unsigned int array[8][8];
-unsigned int curRow = 0;
-unsigned int curCol = 0;
-void main(void) {
-    TRISD = 0x00;
-    LATD = 0x00;
-    TRISC = 0b00111111;
-    PORTC = 0;
-    TRISA = 0;
-    TRISE=0;
-    TRISB = 0;
 
-    for(unsigned int i = 0;i < 8;i++){
-        for(unsigned int j = 0;j < 8;j++)
-            array[i][j] = 0;
+void LCD_Write ( unsigned char c ) {
+
+    *(lcd.PORT) &= ~(1 << lcd.RS);
+    LCD_Out(c);
+
+    *(lcd.PORT) |= 1 << lcd.EN;
+    _delay((unsigned long)((4)*(8000000/4000.0)));
+    *(lcd.PORT) &= ~(1 << lcd.EN);
+
+}
+
+_Bool LCD_Init ( LCD display ) {
+
+    lcd = display;
+# 74 "lcd.c"
+    if ( lcd.PORT == &PORTA ) {
+        TRISA = 0x00;
     }
-    array[0][0] = 1;
-    static unsigned char buttonDisable = 0;
+    else if ( lcd.PORT == &PORTB ) {
+        TRISB = 0x00;
+    }
+    else if ( lcd.PORT == &PORTC ) {
+        TRISC = 0x00;
+    }
+    else if ( lcd.PORT == &PORTD ) {
+        TRISD = 0x00;
+    }
+    else if ( lcd.PORT == &PORTE ) {
+        TRISE = 0x00;
+    }
+    else {
+        return 0;
+    }
 
 
+    _delay((unsigned long)((20)*(8000000/4000.0)));
 
 
+    LCD_Write(0x03);
+    _delay((unsigned long)((5)*(8000000/4000.0)));
+    LCD_Write(0x03);
+    _delay((unsigned long)((16)*(8000000/4000.0)));
+    LCD_Write(0x03);
 
-    while(1){
-        if(!PORTCbits.RC0){
-            forward();
-        }
-        else if(!PORTCbits.RC1){
-            backward();
-        }
-        else if(!PORTCbits.RC3){
-            left();
-        }
-        else if(!PORTCbits.RC5){
-            stop();
-        }
-        else if(!PORTCbits.RC4){
-            right();
 
-        }
-    }
-    return;
+    LCD_Write(0x02);
+
+
+    do { LCD_Write( (0x28 & 0xF0) >> 4 ); LCD_Write( 0x28 & 0x0F); } while ( 0 );
+
+
+    do { LCD_Write( (0x06 & 0xF0) >> 4 ); LCD_Write( 0x06 & 0x0F); } while ( 0 );
+
+    do { unsigned char cmd = 0x08; if ( 1 == 1 ) { cmd |= 1 << 2; } if ( 0 == 1 ) { cmd |= 1 << 1; } if ( 0 == 1 ) { cmd |= 1; } do { LCD_Write( (cmd & 0xF0) >> 4 ); LCD_Write( cmd & 0x0F); } while ( 0 ); } while ( 0 );
+
+    do { LCD_Write( (0x01 & 0xF0) >> 4 ); LCD_Write( 0x01 & 0x0F); } while ( 0 );
+
+    return 1;
 }
-void DrawMove(){
-    for(unsigned int i=0;i<8;i++){
-        setrow(i);
-        for(unsigned int j=0;j<8;j++){
-            if(array[i][j] == 0){
-                setcol(i);
-            }
-            else{
-                unsetcol(i);
-            }
-        }
-        unsetrow(i);
-        for(unsigned int j=0;j<10000;j++){
-            for(unsigned int k =0;k<10000;k++);
-        }
-    }
+
+void LCD_putc ( char c ) {
+
+   *(lcd.PORT) |= 1 << lcd.RS;
+    LCD_Out((c & 0xF0) >> 4);
+
+    *(lcd.PORT) |= 1 << lcd.EN;
+    _delay((unsigned long)((40)*(8000000/4000000.0)));
+    *(lcd.PORT) &= ~(1 << lcd.EN);
+
+    LCD_Out(c & 0x0F);
+
+    *(lcd.PORT) |= 1 << lcd.EN;
+    _delay((unsigned long)((40)*(8000000/4000000.0)));
+    *(lcd.PORT) &= ~(1 << lcd.EN);
+
 }
-void ShowMove(){
-    switch(direction){
-        case 0:
-            if(curRow!=7) curRow++;
-            break;
-        case 1:
-            if(curRow!=0) curCol--;
-            break;
-        case 2:
-            if(curCol!=7) curCol++;
-            break;
-        case 3:
-            if(curCol!=0) curCol--;
-            break;
-        array[curRow][curCol] = 1;
+
+void LCD_puts ( char *a ) {
+
+    for ( int i = 0; a[i] != '\0'; ++i ) {
+        LCD_putc(a[i]);
     }
-    DrawMove();
+
 }
-void forward(){
-    while(1){
-        PORTDbits.RD1 = 1;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 1;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC3 ==0 || PORTCbits.RC4 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC1 == 0){
-            PORTCbits.RC0 = 1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            direction = 0;
-            ShowMove();
-        }
+
+void LCD_putrs ( const char *a ) {
+
+    for ( int i = 0; a[i] != '\0'; ++i ) {
+        LCD_putc(a[i]);
     }
+
 }
-void backward(){
-    while(1){
-        PORTDbits.RD1 = 0;
-        PORTDbits.RD0 = 1;
-        PORTDbits.RD3 = 0;
-        PORTDbits.RD2 = 1;
-        if(PORTCbits.RC3 ==0|| PORTCbits.RC4 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC1 = 1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            direction = 1;
-            ShowMove();
-        }
-    }
-}
-void left(){
-    while(1){
-        PORTDbits.RD1 = 0;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 1;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC1 ==0 || PORTCbits.RC4 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC3 =1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            direction = 2;
-            ShowMove();
-        }
-    }
-}
-void right(){
-    while(1){
-        PORTDbits.RD1 = 1;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 0;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC1 ==0 || PORTCbits.RC3 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC4 = 1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            direction = 3;
-            ShowMove();
-        }
-    }
-}
-void stop(){
-    while(1){
-        PORTDbits.RD1 = 0;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 0;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC1 ==0 || PORTCbits.RC3 == 0 || PORTCbits.RC4 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC5 = 1;
-            break;
-        }
-    }
-}
-void MSdelay(unsigned int val)
-{
-     for(unsigned int j=0;j<val;j++){
-            for(unsigned int k =0;k<10000;k++);
-        }
- }

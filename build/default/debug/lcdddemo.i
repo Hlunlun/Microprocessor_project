@@ -1,4 +1,4 @@
-# 1 "newmain.c"
+# 1 "lcdddemo.c"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 288 "<built-in>" 3
@@ -6,8 +6,8 @@
 # 1 "<built-in>" 2
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
-# 1 "newmain.c" 2
-# 1 "./configure_header_file.h" 1
+# 1 "lcdddemo.c" 2
+
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\xc.h" 1 3
 # 18 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\xc.h" 3
 extern const char __xc8_OPTIM_SPEED;
@@ -4609,332 +4609,65 @@ __attribute__((__unsupported__("The " "Write_b_eep" " routine is no longer suppo
 unsigned char __t1rd16on(void);
 unsigned char __t3rd16on(void);
 # 33 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\xc.h" 2 3
-# 1 "./configure_header_file.h" 2
+# 2 "lcdddemo.c" 2
 
 
 
 
 
+void cmd(unsigned char);
+void data(unsigned char);
+void delay(unsigned int);
 
+int main(void){
 
+    unsigned char input, output,i;
 
-#pragma config OSC = INTIO67
-
-#pragma config FCMEN = OFF
-
-#pragma config IESO = OFF
-
-
-
-#pragma config PWRT = OFF
-#pragma config BOREN = SBORDIS
-
-
-#pragma config BORV = 3
-
-
-#pragma config WDT = OFF
-
-#pragma config WDTPS = 32768
-
-
-#pragma config CCP2MX = PORTC
-
-#pragma config PBADEN = OFF
-
-
-#pragma config LPT1OSC = OFF
-
-
-#pragma config MCLRE = OFF
-
-
-
-#pragma config STVREN = ON
-
-#pragma config LVP = OFF
-
-#pragma config XINST = OFF
-
-
-
-
-#pragma config CP0 = OFF
-
-#pragma config CP1 = OFF
-
-#pragma config CP2 = OFF
-
-#pragma config CP3 = OFF
-
-
-
-#pragma config CPB = OFF
-
-#pragma config CPD = OFF
-
-
-
-#pragma config WRT0 = OFF
-
-#pragma config WRT1 = OFF
-
-#pragma config WRT2 = OFF
-
-#pragma config WRT3 = OFF
-
-
-
-#pragma config WRTC = OFF
-
-
-#pragma config WRTB = OFF
-
-#pragma config WRTD = OFF
-
-
-
-#pragma config EBTR0 = OFF
-
-
-#pragma config EBTR1 = OFF
-
-
-#pragma config EBTR2 = OFF
-
-
-#pragma config EBTR3 = OFF
-
-
-
-
-#pragma config EBTRB = OFF
-# 1 "newmain.c" 2
-# 12 "newmain.c"
-void forward();
-void backward();
-void left();
-void right();
-void stop();
-void ShowMove();
-void DrawMove();
-void MSdelay(unsigned int val);
-# 40 "newmain.c"
-unsigned int direction = 0;
-
-
-
-
-
-void setcol(unsigned int col){
-    switch(col){
-        case 0: PORTAbits.RA4 = 0; break;
-        case 1: PORTBbits.RB0 = 0; break;
-        case 2: PORTBbits.RB2 = 0; break;
-        case 3: PORTDbits.RD4 = 0; break;
-        case 4: PORTBbits.RB3 = 0; break;
-        case 5: PORTCbits.RC7 = 0; break;
-        case 6: PORTDbits.RD5 = 0; break;
-        case 7: PORTEbits.RE1 = 0; break;
-    }
-}
-void unsetcol(unsigned int col){
-    switch(col){
-        case 0: PORTAbits.RA4 = 1; break;
-        case 1: PORTBbits.RB0 = 1; break;
-        case 2: PORTBbits.RB2 = 1; break;
-        case 3: PORTDbits.RD4 = 1; break;
-        case 4: PORTBbits.RB3 = 1; break;
-        case 5: PORTCbits.RC7 = 1; break;
-        case 6: PORTDbits.RD5 = 1; break;
-        case 7: PORTEbits.RE1 = 1; break;
-    }
-}
-void setrow(unsigned int row){
-    switch(row){
-        case 0: PORTAbits.RA0 = 0; break;
-        case 1: PORTAbits.RA5 = 0; break;
-        case 2: PORTDbits.RD6 = 0; break;
-        case 3: PORTAbits.RA3 = 0; break;
-        case 4: PORTBbits.RB5 = 0; break;
-        case 5: PORTBbits.RB4 = 0; break;
-        case 6: PORTDbits.RD7 = 0; break;
-        case 7: PORTBbits.RB1 = 0; break;
-    }
-}
-void unsetrow(unsigned int row){
-    switch(row){
-        case 0: PORTAbits.RA0 = 1; break;
-        case 1: PORTAbits.RA5 = 1; break;
-        case 2: PORTDbits.RD6 = 1; break;
-        case 3: PORTAbits.RA3 = 1; break;
-        case 4: PORTBbits.RB5 = 1; break;
-        case 5: PORTBbits.RB4 = 1; break;
-        case 6: PORTDbits.RD7 = 1; break;
-        case 7: PORTBbits.RB1 = 1; break;
-    }
-}
-unsigned int array[8][8];
-unsigned int curRow = 0;
-unsigned int curCol = 0;
-void main(void) {
+    unsigned char tstr[13] = {
+        'S','w','i','t','c','h',' ','V','a','l','u','e',':'
+    };
     TRISD = 0x00;
-    LATD = 0x00;
-    TRISC = 0b00111111;
-    PORTC = 0;
-    TRISA = 0;
-    TRISE=0;
+    ADCON1 = 0x0F;
     TRISB = 0;
+    PORTB = 0x00;
+    delay(5);
+    cmd(0x0C);
+    delay(5);
+    cmd(0x01);
+    delay(5);
+    cmd(0x06);
+    delay(5);
+    cmd(0x08);
+    delay(5);
 
-    for(unsigned int i = 0;i < 8;i++){
-        for(unsigned int j = 0;j < 8;j++)
-            array[i][j] = 0;
-    }
-    array[0][0] = 1;
-    static unsigned char buttonDisable = 0;
-
-
-
-
+    for(i=0;i<13;i++)
+        data(tstr[i]);
 
     while(1){
-        if(!PORTCbits.RC0){
-            forward();
-        }
-        else if(!PORTCbits.RC1){
-            backward();
-        }
-        else if(!PORTCbits.RC3){
-            left();
-        }
-        else if(!PORTCbits.RC5){
-            stop();
-        }
-        else if(!PORTCbits.RC4){
-            right();
+        input = 'd';
+        output = 0x30|input;
+        data(output);
+        delay(5);
+        cmd(0x10);
+    }
+}
 
-        }
-    }
-    return;
+void cmd(unsigned char value){
+    PORTD = value;
+    PORTB = 0x04;
+    delay(5);
+    PORTB = 0x00;
 }
-void DrawMove(){
-    for(unsigned int i=0;i<8;i++){
-        setrow(i);
-        for(unsigned int j=0;j<8;j++){
-            if(array[i][j] == 0){
-                setcol(i);
-            }
-            else{
-                unsetcol(i);
-            }
-        }
-        unsetrow(i);
-        for(unsigned int j=0;j<10000;j++){
-            for(unsigned int k =0;k<10000;k++);
-        }
-    }
+
+void data(unsigned char value){
+    PORTD = value;
+    PORTB = 0x05;
+    delay(5);
+    PORTB = 0x01;
 }
-void ShowMove(){
-    switch(direction){
-        case 0:
-            if(curRow!=7) curRow++;
-            break;
-        case 1:
-            if(curRow!=0) curCol--;
-            break;
-        case 2:
-            if(curCol!=7) curCol++;
-            break;
-        case 3:
-            if(curCol!=0) curCol--;
-            break;
-        array[curRow][curCol] = 1;
-    }
-    DrawMove();
+
+void delay(unsigned int itime){
+    unsigned int i,j;
+    for(i=0;i<itime;i++)
+        for(j=0;j<255;j++);
 }
-void forward(){
-    while(1){
-        PORTDbits.RD1 = 1;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 1;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC3 ==0 || PORTCbits.RC4 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC1 == 0){
-            PORTCbits.RC0 = 1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            direction = 0;
-            ShowMove();
-        }
-    }
-}
-void backward(){
-    while(1){
-        PORTDbits.RD1 = 0;
-        PORTDbits.RD0 = 1;
-        PORTDbits.RD3 = 0;
-        PORTDbits.RD2 = 1;
-        if(PORTCbits.RC3 ==0|| PORTCbits.RC4 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC1 = 1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            direction = 1;
-            ShowMove();
-        }
-    }
-}
-void left(){
-    while(1){
-        PORTDbits.RD1 = 0;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 1;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC1 ==0 || PORTCbits.RC4 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC3 =1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            direction = 2;
-            ShowMove();
-        }
-    }
-}
-void right(){
-    while(1){
-        PORTDbits.RD1 = 1;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 0;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC1 ==0 || PORTCbits.RC3 == 0 || PORTCbits.RC5 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC4 = 1;
-            break;
-        }
-        else{
-            MSdelay(200);
-            direction = 3;
-            ShowMove();
-        }
-    }
-}
-void stop(){
-    while(1){
-        PORTDbits.RD1 = 0;
-        PORTDbits.RD0 = 0;
-        PORTDbits.RD3 = 0;
-        PORTDbits.RD2 = 0;
-        if(PORTCbits.RC1 ==0 || PORTCbits.RC3 == 0 || PORTCbits.RC4 == 0 || PORTCbits.RC0 == 0){
-            PORTCbits.RC5 = 1;
-            break;
-        }
-    }
-}
-void MSdelay(unsigned int val)
-{
-     for(unsigned int j=0;j<val;j++){
-            for(unsigned int k =0;k<10000;k++);
-        }
- }

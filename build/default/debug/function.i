@@ -4611,6 +4611,152 @@ unsigned char __t3rd16on(void);
 # 1 "function.c" 2
 
 
+# 1 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\c99\\stdio.h" 1 3
+# 24 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\c99\\stdio.h" 3
+# 1 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\c99\\bits/alltypes.h" 1 3
+
+
+
+
+
+typedef void * va_list[1];
+
+
+
+
+typedef void * __isoc_va_list[1];
+# 137 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\c99\\bits/alltypes.h" 3
+typedef long ssize_t;
+# 246 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\c99\\bits/alltypes.h" 3
+typedef long long off_t;
+# 399 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\c99\\bits/alltypes.h" 3
+typedef struct _IO_FILE FILE;
+# 24 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\c99\\stdio.h" 2 3
+# 52 "C:\\Program Files\\Microchip\\xc8\\v2.40\\pic\\include\\c99\\stdio.h" 3
+typedef union _G_fpos64_t {
+ char __opaque[16];
+ double __align;
+} fpos_t;
+
+extern FILE *const stdin;
+extern FILE *const stdout;
+extern FILE *const stderr;
+
+
+
+
+
+FILE *fopen(const char *restrict, const char *restrict);
+FILE *freopen(const char *restrict, const char *restrict, FILE *restrict);
+int fclose(FILE *);
+
+int remove(const char *);
+int rename(const char *, const char *);
+
+int feof(FILE *);
+int ferror(FILE *);
+int fflush(FILE *);
+void clearerr(FILE *);
+
+int fseek(FILE *, long, int);
+long ftell(FILE *);
+void rewind(FILE *);
+
+int fgetpos(FILE *restrict, fpos_t *restrict);
+int fsetpos(FILE *, const fpos_t *);
+
+size_t fread(void *restrict, size_t, size_t, FILE *restrict);
+size_t fwrite(const void *restrict, size_t, size_t, FILE *restrict);
+
+int fgetc(FILE *);
+int getc(FILE *);
+int getchar(void);
+int ungetc(int, FILE *);
+
+int fputc(int, FILE *);
+int putc(int, FILE *);
+int putchar(int);
+
+char *fgets(char *restrict, int, FILE *restrict);
+
+char *gets(char *);
+
+
+int fputs(const char *restrict, FILE *restrict);
+int puts(const char *);
+
+__attribute__((__format__(__printf__, 1, 2)))
+int printf(const char *restrict, ...);
+__attribute__((__format__(__printf__, 2, 3)))
+int fprintf(FILE *restrict, const char *restrict, ...);
+__attribute__((__format__(__printf__, 2, 3)))
+int sprintf(char *restrict, const char *restrict, ...);
+__attribute__((__format__(__printf__, 3, 4)))
+int snprintf(char *restrict, size_t, const char *restrict, ...);
+
+__attribute__((__format__(__printf__, 1, 0)))
+int vprintf(const char *restrict, __isoc_va_list);
+int vfprintf(FILE *restrict, const char *restrict, __isoc_va_list);
+__attribute__((__format__(__printf__, 2, 0)))
+int vsprintf(char *restrict, const char *restrict, __isoc_va_list);
+__attribute__((__format__(__printf__, 3, 0)))
+int vsnprintf(char *restrict, size_t, const char *restrict, __isoc_va_list);
+
+__attribute__((__format__(__scanf__, 1, 2)))
+int scanf(const char *restrict, ...);
+__attribute__((__format__(__scanf__, 2, 3)))
+int fscanf(FILE *restrict, const char *restrict, ...);
+__attribute__((__format__(__scanf__, 2, 3)))
+int sscanf(const char *restrict, const char *restrict, ...);
+
+__attribute__((__format__(__scanf__, 1, 0)))
+int vscanf(const char *restrict, __isoc_va_list);
+int vfscanf(FILE *restrict, const char *restrict, __isoc_va_list);
+__attribute__((__format__(__scanf__, 2, 0)))
+int vsscanf(const char *restrict, const char *restrict, __isoc_va_list);
+
+void perror(const char *);
+
+int setvbuf(FILE *restrict, char *restrict, int, size_t);
+void setbuf(FILE *restrict, char *restrict);
+
+char *tmpnam(char *);
+FILE *tmpfile(void);
+
+
+
+
+FILE *fmemopen(void *restrict, size_t, const char *restrict);
+FILE *open_memstream(char **, size_t *);
+FILE *fdopen(int, const char *);
+FILE *popen(const char *, const char *);
+int pclose(FILE *);
+int fileno(FILE *);
+int fseeko(FILE *, off_t, int);
+off_t ftello(FILE *);
+int dprintf(int, const char *restrict, ...);
+int vdprintf(int, const char *restrict, __isoc_va_list);
+void flockfile(FILE *);
+int ftrylockfile(FILE *);
+void funlockfile(FILE *);
+int getc_unlocked(FILE *);
+int getchar_unlocked(void);
+int putc_unlocked(int, FILE *);
+int putchar_unlocked(int);
+ssize_t getdelim(char **restrict, size_t *restrict, int, FILE *restrict);
+ssize_t getline(char **restrict, size_t *restrict, FILE *restrict);
+int renameat(int, const char *, int, const char *);
+char *ctermid(char *);
+
+
+
+
+
+
+
+char *tempnam(const char *, const char *);
+# 3 "function.c" 2
+
 
 #pragma config OSC = INTIO67
 #pragma config WDT = OFF
@@ -4619,28 +4765,195 @@ unsigned char __t3rd16on(void);
 #pragma config PBADEN = OFF
 #pragma config LVP = OFF
 #pragma config CPD = OFF
-# 25 "function.c"
+# 36 "function.c"
+void Trigger_Pulse_10us();
+
+void set7(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsigned char e,unsigned char f,unsigned char g,unsigned char h){
+    PORTDbits.RD4 = 1;
+    PORTDbits.RD5 = 0;
+    PORTCbits.RC6 = a;
+    PORTCbits.RC7 = b;
+    PORTAbits.RA2 = c;
+    PORTAbits.RA5 = d;
+    PORTAbits.RA4 = e;
+    PORTDbits.RD6 = f;
+    PORTEbits.RE0 = g;
+    PORTAbits.RA3 = h;
+}
 void main(void) {
+
+    float Distance;
+    int Time;
+    OSCCON=0x72;
+    TRISD = 0;
+    INTCON2bits.RBPU=0;
+    LATC5 = 0;
+
+    T1CON = 0x80;
+    TMR1IF = 0;
+    TMR1=0;
+
 
 
     TRISA = 0;
     TRISC = 0;
     TRISD = 0;
+    TRISE = 0;
     PORTD = 0;
-# 99 "function.c"
-    while(1){
-    PORTAbits.RA3 = 0;
 
-    PORTAbits.RA4 = 1;
-    PORTAbits.RA1 = 0;
-    PORTAbits.RA2 = 0;
-    PORTCbits.RC7 = 0;
-    PORTDbits.RD6 =0;
+    ADCON1 = 0x0F;
+
+
+    T2CONbits.TMR2ON = 0b1;
+    T2CONbits.T2CKPS = 0b01;
+
+
+    OSCCONbits.IRCF = 0b001;
+
+
+    CCP1CONbits.CCP1M = 0b1100;
+    CCP2CONbits.CCP2M = 0b1100;
+
+    TRISC = 0;
+    LATC = 0;
+
+    TRISA = 0;
+    LATA = 0;
+
+
+    PORTB = 0;
+    TRISB = 0b00001111;
+
+
+
+
+
+
+
+    PR2 = 0x9b;
+
+
+
+
+
+
+
+    CCPR1L = 0x04;
+    CCP1CONbits.DC1B = 0b00;
+
+    CCPR2L = 0x04;
+    CCP2CONbits.DC2B = 0b00;
+
+
+    INTCONbits.GIEH = 1;
+    INTCONbits.GIEL = 1;
+
+    INTCONbits.INT0IE = 1;
+    INTCON3bits.INT1IE = 1;
+    INTCON3bits.INT2IE = 1;
+
+    INTCONbits.INT0IF = 0;
+    INTCON3bits.INT1IF = 0;
+    INTCON3bits.INT2IF = 0;
+
+    INTCON3bits.INT1IP = 0;
+    INTCON3bits.INT2IP = 1;
+
+    INTCON2 = 0;
+    IPR1bits.RCIP = 0;
+    PIE1bits.RCIE = 1;
+
+    PORTDbits.RD4 = 1;
     PORTDbits.RD5 = 0;
     PORTCbits.RC6 = 0;
-    PORTDbits.RD7 = 0;
+    PORTCbits.RC7 = 0;
+    PORTAbits.RA2 = 0;
+    PORTAbits.RA5 =1;
+    PORTAbits.RA4 = 1;
+    PORTDbits.RD6 = 0;
+    PORTEbits.RE0 = 0;
+    PORTAbits.RA3 =0;
 
-    PORTDbits.RD4 =0;
+
+    int soil = 0;
+    while(1){
+
+
+        if(Distance < 9){
+            set7(0,0,0,0,0,0,0,1);
+        }
+        else if(Distance < 8){
+            set7(0,0,0,1,1,1,1,1);
+        }
+        else if(Distance < 7){
+            set7(0,1,0,0,0,0,0,1);
+        }
+        else if(Distance < 6){
+            set7(0,1,0,0,1,0,0,1);
+        }
+        else if(Distance < 5){
+            set7(1,0,0,1,1,0,0,1);
+        }
+        else if(Distance < 4){
+            set7(0,0,0,0,1,1,0,1);
+        }
+        else if(Distance < 3){
+            set7(0,0,1,0,0,1,0,1);
+        }
+        else if(Distance < 2){
+            set7(1,0,0,1,1,1,1,1);
+        }
+        else{
+            set7(0,0,0,0,0,0,1,1);
+        }
+
+        Trigger_Pulse_10us();
+     while(PORTCbits.RC4==0)
+        {
+
+            if(PORTBbits.RB3 ==1){
+                for(int i=0;i<20;i++){
+                    PORTDbits.RD3 = 1;
+                    PORTDbits.RD2 = 0;
+                    if(i==19){
+                        PORTDbits.RD3 = 0;
+                        PORTDbits.RD2 = 0;
+                    }
+                }
+            }
+        }
+     TMR1=0;
+     TMR1ON=1;
+     while(PORTCbits.RC5==1 && !TMR1IF){
+           if(PORTBbits.RB3 ==1){
+                for(int i=0;i<20;i++){
+                    PORTDbits.RD3 = 1;
+                    PORTDbits.RD2 = 0;
+                    if(i==19){
+                        PORTDbits.RD3 = 0;
+                        PORTDbits.RD2 = 0;
+                    }
+                }
+            }
+        }
+     Time = TMR1;
+     TMR1ON=0;
+     Distance = ((float)Time/117.00);
+
+
+
+       if(PORTBbits.RB3 ==1 ){
+                for(int i=0;i<20;i++){
+                    PORTDbits.RD3 = 1;
+                    PORTDbits.RD2 = 0;
+                    if(i==19){
+                        PORTDbits.RD3 = 0;
+                        PORTDbits.RD2 = 0;
+                    }
+                }
+            }
+
+
 
     }
     return;
@@ -4648,9 +4961,10 @@ void main(void) {
 int i = 0;
 int j = 0;
 int k = 0;
-void __attribute__((picinterrupt(("")))) ISR(void)
-{
-    if (INTCONbits.INT0IF==1){
+int soil = 0;
+void __attribute__((picinterrupt(("")))) ISR(void){
+
+     if (INTCONbits.INT0IF==1 && PORTBbits.RB1==1){
         if(i % 2==0){
             CCPR1L = 0x0b;
             CCP1CONbits.DC1B = 0b01;
@@ -4662,9 +4976,7 @@ void __attribute__((picinterrupt(("")))) ISR(void)
         i++;
         INTCONbits.TMR0IF = 0;
         INTCONbits.INT0IF = 0;
-    }
-
-    if (INTCON3bits.INT1IF==1){
+    }else if (INTCON3bits.INT1IF==1 && PORTBbits.RB2==1){
         if(j % 2==0){
             CCPR2L = 0x0b;
             CCP2CONbits.DC2B = 0b01;
@@ -4674,20 +4986,25 @@ void __attribute__((picinterrupt(("")))) ISR(void)
             CCP2CONbits.DC2B = 0x03;
         }
         j++;
-
         INTCON3bits.INT1IF = 0;
-    }
-
-    if (INTCON3bits.INT2IF == 1){
+    }else if (INTCON3bits.INT2IF == 1 && PORTBbits.RB0==1){
         if(k % 2==0){
-            LATA = 3;
+            LA0 = 1;
+            LA1 = 1;
+
         }
         else{
-            LATA = 0;
+            LA0 = 0;
+            LA1=0;
         }
         k++;
-
         INTCON3bits.INT2IF = 0;
     }
+}
 
+void Trigger_Pulse_10us()
+{
+    LATC5 = 1;
+    _delay((unsigned long)((10)*(8000000/4000000.0)));
+    LATC5 = 0;
 }
