@@ -74,7 +74,7 @@ void main(void) {
     T2CONbits.TMR2ON = 0b1;
     T2CONbits.T2CKPS = 0b01;
 
-    // Internal Oscillator Frequency, Fosc = 125 kHz, Tosc = 8 µs
+    // Internal Oscillator Frequency, Fosc = 125 kHz, Tosc = 8 Âµs
     OSCCONbits.IRCF = 0b001;
     
     // PWM mode, P1A, P1C active-high; P1B, P1D active-high
@@ -94,16 +94,16 @@ void main(void) {
     /** 
      * PWM period
      * = (PR2 + 1) * 4 * Tosc * (TMR2 prescaler)
-     * = (0x9b + 1) * 4 * 8µs * 4
-     * = 0.019968s ~= 20µs
+     * = (0x9b + 1) * 4 * 8Âµs * 4
+     * = 0.019968s ~= 20Âµs
      */
     PR2 = 0x9b;
     
     /**
      * Duty cycle
      * = (CCPR1L:CCP1CON<5:4>) * Tosc * (TMR2 prescaler)
-     * = (0x04*4 + 0b00) * 8µs * 4
-     * = 0.00512s ~= 512µs
+     * = (0x04*4 + 0b00) * 8Âµs * 4
+     * = 0.00512s ~= 512Âµs
      */
     CCPR1L = 0x04;
     CCP1CONbits.DC1B = 0b00; 
@@ -171,7 +171,14 @@ void main(void) {
         }
         
         if(PORTBbits.RB3 == 1){
+            Left_1 =1;
+            Left_2 =0; 
             Right_1 =1;
+            Right_2 = 0;
+        }else{
+            Left_1 =0;
+            Left_2 =0; 
+            Right_1 =0;
             Right_2 = 0;
         }
     
