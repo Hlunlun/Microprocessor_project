@@ -49,9 +49,12 @@ void set7(unsigned char a,unsigned char b,unsigned char c,unsigned char d,unsign
 }
 void main(void) {
     
+    // Internal Oscillator Frequency, Fosc = 125 kHz, Tosc = 8 µs
+    OSCCONbits.IRCF = 0b001;
+    
     float Distance;
     int Time;
-    OSCCON=0x72;		/* Use internal oscillator frequency */
+    //OSCCON=0x72;		/* Use internal oscillator frequency */
     TRISD = 0;			/* Make PORTD as Output port*/
     INTCON2bits.RBPU=0;		/* Enable PORTB Pull-ups */
     Trigger_Pulse = 0;
@@ -74,8 +77,7 @@ void main(void) {
     T2CONbits.TMR2ON = 0b1;
     T2CONbits.T2CKPS = 0b01;
 
-    // Internal Oscillator Frequency, Fosc = 125 kHz, Tosc = 8 µs
-    OSCCONbits.IRCF = 0b001;
+    
     
     // PWM mode, P1A, P1C active-high; P1B, P1D active-high
     CCP1CONbits.CCP1M = 0b1100;
@@ -158,7 +160,7 @@ void main(void) {
         }/* Wait for falling edge */
     	Time = TMR1;		/* Copy Time when echo is received */
     	TMR1ON=0;			/* Turn OFF Timer1 */
-    	Distance = ((float)Time/117.00);/* Distance =(velocity x Time)/2 */
+    	Distance = ((float)Time*0.01372);/* Distance =(velocity x Time)/2 */
         
         if(Distance<9){
             set7(0,0,0,0,0,0,0,1);
