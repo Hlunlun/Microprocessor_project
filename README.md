@@ -1,12 +1,19 @@
 # 2022微算機期末專題文件
 ###### tags: `microcomputer`
 [原始碼下載連結](https://drive.google.com/file/d/1x6EfPmAoLbmSHL_loayxDHxZCGnzOWUP/view?usp=share_link) 
+
 [影片檔觀看連結](https://drive.google.com/file/d/1tw06FpkpIOctcW2E6TfR4HpdDEFLRIUX/view?usp=share_link)
+
 [原始碼GitHub連結](https://github.com/weihsinyeh/Microprocessor-Project.git)
+
 Group Members :
+
 ●陳紅宏 F74097065
+
 ●雷美心 F74095314
+
 ●葉惟欣 F74109016 
+
 ●黃佳倫 E64096245
 
 ## a.Description of System Functions and Principles
