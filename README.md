@@ -59,27 +59,32 @@ Demo video : https://youtu.be/HZmYcK4nnb8
 #### 1.2 Watering machine 
 
 ![](https://i.imgur.com/cAPndpn.png)
+
 Demo video : https://youtu.be/vNmy5nwkuUk 
 
 #### 1.3 Plant Machine 
 
 ![](https://i.imgur.com/0EX8zxe.png)
+
 Demo video : https://youtu.be/Qj_ujl7H98E 
 
 #### 1.4 Digging the soil 
 
 ![](https://i.imgur.com/O1n3t9K.png)
+
 Demo Video : https://youtu.be/v89_Q-JRsBY  
 
 #### 1.5 Robot moving control
 
 ![](https://i.imgur.com/MiLTAjl.png)
+
 Demo Video : https://youtu.be/W0g9xHhyw_U 
 
 #### 1.6 Location display on 8*8 dot matrix
 
 ![](https://i.imgur.com/CKOMptn.png)
 ![](https://i.imgur.com/AB1VD64.png)
+
 Demo  video : https://youtu.be/jXSN8A6g8iw 
 
 #### 1.7 the amount of water show on 7-Segment display
@@ -89,6 +94,7 @@ Demo  video : https://youtu.be/jXSN8A6g8iw
 ### 2.Flowchart
 
 * Check which button is pressed (watering, planting seed, or lights)
+
 ![](https://i.imgur.com/K994ZEI.png)
 
 * Watering Flow Chart
