@@ -98,50 +98,64 @@ Demo  video : https://youtu.be/jXSN8A6g8iw
 ![](https://i.imgur.com/K994ZEI.png)
 
 * Watering Flow Chart
+
 ![](https://i.imgur.com/XkIHRHw.png)
 
 * Planting the seed Flow Chart
+
 ![](https://i.imgur.com/WFcaV1x.png)
 
 
 * Digging the soil Flow Chart
+
 ![](https://i.imgur.com/I6I1sTz.png)
 
 * Lighting (LED) Flow Chart
+
 ![](https://i.imgur.com/52sCy8q.png)
 
 * Seven-Segment Display Flow Chart
+
 ![](https://i.imgur.com/qO8kDVI.png)
 
 * Moving Direction Control Flow Chart
+
 ![](https://i.imgur.com/RtyMUTG.png)
 
 * 8*8 Dot Matrix Display Location Flow Chart
+
 ![](https://i.imgur.com/W7ajeyG.png)
 
 ### 3.Circuits: 
 * main.c
+
 ![](https://i.imgur.com/QyLcJx7.png)
 
 * function.c 
+
 ![](https://i.imgur.com/4bFMWQW.png)
 
 * Dig the soil with DC motor
+
 ![](https://i.imgur.com/zAl086v.png)
 
 * 8*8 dot matrix 
+
 set row and column pin that tell the farmer where the agriculture robot is. 
 ![](https://i.imgur.com/JOiGKMd.png)
 
 [Reference : Interfacing 8×8 LED Matrix](https://www.circuitstoday.com/interfacing-8x8-led-matrix-with-arduino?fbclid=IwAR1Dwr7snI5L6WABfz_edGxfDH6wiEoKvDJpHciI9DBSWRIvzOQmyx_M33Q)
 
 * PIC18F4520 main.c pin setting
+
 ![](https://i.imgur.com/s1YA29v.png)
 
 * Seven-segment display the amount of water to tell the farmer when to supply water.
+
 ![](https://i.imgur.com/bbApwGN.png)
 
 * PIC18F4520 function.c pin setting
+
 ![](https://i.imgur.com/tDc8cwH.png)
 
 ---
