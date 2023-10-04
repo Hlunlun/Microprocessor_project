@@ -220,6 +220,6 @@ Case2 : 如果電阻很小的時候則當我按下button 則，輸入到pin的�
 要實現大面積路徑顯示就要一排排刷，而一排排的效果就要所有的code都在run點矩陣，但我們是只有在改變路徑或到行經特定時間才會再做location定位的移動，所以我就改成只做location定位，而不是record the path.
 
 5. Difficulties about amount of water display
-At the beginning, we had to measure the height of the bottle that contained water. Also, we tried to figure out how ultrasonic and seven displays work. We referred to this code. We selected an 8 MHz oscillator frequency, so time to execute 1 instruction is 1/(125k/4) = 0.8 us. Therefore, the timer value increases every 0.5 us . The distance of object is 
+At the beginning, we had to measure the height of the bottle that contained water. Also, we tried to figure out how ultrasonic and seven displays work. We referred to this code. We selected an 8 MHz oscillator frequency, so time to execute 1 instruction is 1/(125k/4) = 0.8 us. Therefore, the timer value increases every 0.8 us . The distance of object is 
 Sound velocity*Timer/2 	= 34300*( TIMER value) x 0.8 x (10^-6 )cm
 = 0.01372 *( TIMER value) cm
