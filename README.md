@@ -1,10 +1,10 @@
-# 2022微算機期末專題文件
+# 2022 Microprocessor-Project
 ###### tags: `microcomputer`
-[原始碼下載連結](https://drive.google.com/file/d/1x6EfPmAoLbmSHL_loayxDHxZCGnzOWUP/view?usp=share_link) 
+[Source Code Link](https://drive.google.com/file/d/1x6EfPmAoLbmSHL_loayxDHxZCGnzOWUP/view?usp=share_link) 
 
-[影片檔觀看連結](https://drive.google.com/file/d/1tw06FpkpIOctcW2E6TfR4HpdDEFLRIUX/view?usp=share_link)
+[Video Link](https://drive.google.com/file/d/1tw06FpkpIOctcW2E6TfR4HpdDEFLRIUX/view?usp=share_link)
 
-[原始碼GitHub連結](https://github.com/weihsinyeh/Microprocessor-Project.git)
+[Github Link](https://github.com/weihsinyeh/Microprocessor-Project.git)
 
 Group Members :
 
@@ -188,38 +188,47 @@ set row and column pin that tell the farmer where the agriculture robot is.
 
 ## g. Difficulties encountered and how to solve them
 
-1. Difficulties about function of watering , plant , lighting 
+**1. Difficulties about function of watering , plant , lighting **
 
 One of the difficulties we face is to interface the buttons with the functions. We need a lot of buttons for different functions, and at first, when we set the function to run if PORTx.RBx = 1 and if INT0IF =1, it doesn’t work.
 
 In the end, we used interrupts INT0, INT1, and INT2 for each button. After we set the function to run if INTxIF = 1, the function will run. Because we could only use two PICKit 4, each PIC only has 3 interrupts, we had to limit the usage of our buttons.
 
-2. Difficulties about high/low voltage
+**2. Difficulties about high/low voltage**
 
-當我們在寫code時候，我們以一般認知認為按鈕按下1 ，則會給我們輸入端high voltage。但神奇的是，經過我們一番努力的debug後，我們發現我們的按鈕按下，是給輸入端low voltage。我原本以為是我們button的電路接法問題，而導致如此的結果。但後來發現其實這沒有差。
+When writing code, the common understanding is that pressing a button (e.g., pressing '1') should result in a high voltage input. However, surprisingly, after extensive debugging efforts, we discovered that our button press was providing a low voltage input instead. Initially, we assumed that the issue was related to the circuitry of our button, leading to such unexpected results. However, later on, we realized that the button's circuitry was not the cause of the discrepancy.
+
 ![](https://i.imgur.com/vZXfoLK.png)
 
-最後，我認為是電阻的問題。由以下圖來說明。
+But in the end, I believe it was an issue with the resistor. This is illustrated in the diagram below.
+
 ![](https://i.imgur.com/qgCGjg4.png)
 
-Case1 : 如果電阻很大的時候則當我按下button 則，輸入到pin的電壓相當於low (2V被電阻吃掉剩趨近於0V，0V與1V並聯，所以輸出為1V)。(如左圖)
-Case2 : 如果電阻很小的時候則當我按下button 則，輸入到pin的電壓相當於high (2V 與 1V並聯，所以輸出為2V)。(如右圖)
-而我們button有接電阻，因此我認為我們是Case1，所以判斷button按下後的電位 check是否為0。而平時我們認為的是未接電阻的button(相當於Case2 電阻很小)，所以判斷button按下後的電位check是否為1。
+Case 1: If the resistance is high, when I press the button, the voltage input to the pin is equivalent to low (2 Volt is largely consumed by the resistor, approaching 0 Volt. Since 0 Volt and 1 Volt are in parallel, the output is 1 Volt) - as shown in the left diagram.
 
-3. Difficulties about control direction
+Case 2: If the resistance is low, when I press the button, the voltage input to the pin is equivalent to high (2 Volt and 1 Volt in parallel, resulting in a 2 Volt output) - as shown in the right diagram.
 
-當我們在用馬達的時候邏輯基本上都正確，但在設定馬達的時候我們一直搞不清楚馬達的delay要設在哪裡，我們參考別人的code，但用在我們的code上面卻執行的不是那麼順利。最後我們理清思緒，決定用polling I/O 假如按下某個方向控制的button 就可以進到相對應控制的function，而在那個function中有一個無限迴圈，只會終止於按下其他button的事件。設一個無限迴圈的原因是因為，我們發現只給他左右馬達高低電位，他似乎只run了微乎其微的一瞬間，因此要設定讓他一直給他高低電位來讓馬達可以讓它移動。與此同時無限迴圈也要設定終止條件，此為其他button按下。如果此事件觸發，則將自己的button = 1(根據困難2說明)。然後跳出此無限迴圈回到main function去檢查是哪個button再次被按下，再進到相對應控制方向的function中。
+As our button is connected to a resistor, I believe we fall into Case 1. Therefore, we check if the potential after pressing the button is 0 Volt. In ordinary situations, where we assume an unconnected button (equivalent to Case 2 with a low resistance), we check if the potential after pressing the button is 1 Volt.
 
-4. Difficulties about location display
-一開始我們在設定8*8 dot matrix，我以為row都是在一排，而column都是在一排，所以我們剛開始跑出來都是錯的。因為真正的dot matrix 上面8個pin角，與下面8個pin角的設定都是交錯的。去查了之後才從新更正。
-第二個困難的部份是我原先不知道8*8 dot matrix 一個row 要設定為high column 要設定為low，二極體才會流過，所以我們一定要有一個設為1一個設為0，才會使想要的位置的燈泡發光。
+**3. Difficulties about control direction**
+
+When dealing with motors, our logical operations were generally correct, but we encountered difficulties determining where to set the delay for the motor in the configuration. Despite referencing code from others, the execution in our code didn't proceed as smoothly. Eventually, after organizing our thoughts, we decided to employ polling I/O. If a button corresponding to a specific direction is pressed, the code enters the respective control function. Within that function, there is an infinite loop that only terminates when another button is pressed. The reason for setting an infinite loop is that when we provided the motor with high and low voltage for left and right movements, it seemed to run for just a fraction of a moment. Therefore, setting a continuous high-low voltage sequence allows the motor to keep moving.
+
+Simultaneously, the infinite loop must include a termination condition, triggered when another button is pressed. If this event occurs, the button for the specific direction is set to 1 (as per the explanation in Difficulty 2). The code then exits the infinite loop, returning to the main function to check which button has been pressed again and proceeds to the corresponding control direction function.
+
+**4. Difficulties about location display**
+
+In the initial setup of the 8x8 dot matrix, I initially misunderstood the configuration, thinking that the rows and columns were aligned separately in rows and columns. Consequently, our initial outputs were incorrect. It was later discovered that the real configuration of the dot matrix involves an interleaved arrangement of the 8 pins on the top and bottom.
+
+The second challenging aspect was my lack of awareness that for an 8x8 dot matrix, setting one row to high and the corresponding column to low allows the diode to conduct. Therefore, it's crucial to set one of them to 1 and the other to 0 to illuminate the desired LED at a specific location.
 ![](https://i.imgur.com/MygejFv.png)
 ![](https://i.imgur.com/2has1xq.png)
 
-第三個困難的部分是原先我們想要做到顯示路徑，但後來我思考過後我們只有顯示一個位置一個點才有可能實現，因為我們不是所有的code都在跑dot matrix display ，而是有改變方向或經過幾秒才進去跑，如果要實現大範圍的點矩陣顯示，就要透過一排一排刷的去顯示，因為dot matrix只能實現一行 或 一列的顯示。而其中切換一排一排的間距時間是奈秒，因為人的肉眼看不到所以就認為他是同時顯示，但其實不竟然。
-要實現大面積路徑顯示就要一排排刷，而一排排的效果就要所有的code都在run點矩陣，但我們是只有在改變路徑或到行經特定時間才會再做location定位的移動，所以我就改成只做location定位，而不是record the path.
+The third challenge arose when we initially aimed to display a path. However, upon further consideration, I realized that achieving this goal would only be possible by displaying one position at a time. This limitation arises because not all of our code runs the dot matrix display continuously; instead, there are directional changes or delays before entering the display section. To achieve a comprehensive display of points, we would need to refresh the matrix row by row, as the dot matrix can only show one row or one column at a time. The switching between rows is done in nanoseconds, imperceptible to the human eye, creating the illusion of simultaneous display.
 
-5. Difficulties about amount of water display
+To implement a broad path display, we would need to refresh row by row, requiring all the code to run the dot matrix continuously. However, in our case, we only update the location when changing the path or after a specific time, rather than continuously recording the entire path. Therefore, I modified the approach to focus on location-based updates rather than recording the entire path.
+
+**5. Difficulties about amount of water display**
 At the beginning, we had to measure the height of the bottle that contained water. Also, we tried to figure out how ultrasonic and seven displays work. We referred to this code. We selected an 8 MHz oscillator frequency, so time to execute 1 instruction is 1/(125k/4) = 0.8 us. Therefore, the timer value increases every 0.8 us . The distance of object is 
 Sound velocity*Timer/2 	= 34300*( TIMER value) x 0.8 x (10^-6 )cm
 = 0.01372 *( TIMER value) cm
